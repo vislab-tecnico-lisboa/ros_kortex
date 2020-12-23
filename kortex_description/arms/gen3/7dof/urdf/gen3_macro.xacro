@@ -4,7 +4,9 @@
 
   <!-- Propagate last link name information because it is the gripper's parent link -->
   <xacro:property name="last_arm_link" value="end_effector_link"/>
-
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
+  <xacro:include filename="$(find kortex_description)/arms/gen3/7dof/urdf/_d435.gazebo.xacro"/>
+  <xacro:property name="cam_name" default="camera"/>
   <xacro:macro name="load_arm" params="parent:='' dof vision prefix *origin">
       <link name="${prefix}base_link">
         <inertial>
@@ -315,7 +317,7 @@
     <xacro:if value="${vision}">
       <link name="${prefix}camera_link" />
       <joint name="${prefix}camera_module" type="fixed">
-        <origin xyz="0 0.05639 -0.00305" rpy="3.14159265358979 3.14159265358979 0" />
+        <origin xyz="0 0.05639 -0.00305" rpy="3.14159265358979 -1.570796327 1.570796327" />
         <parent link="${prefix}end_effector_link" />
         <child  link="${prefix}camera_link" />
       </joint>
@@ -331,6 +333,11 @@
         <parent link="${prefix}end_effector_link" />
         <child  link="${prefix}camera_color_frame" />
       </joint>
+      <xacro:sensor_d435 name="realsense" parent="${prefix}camera_link">
+        <origin xyz="0.0 0.0 0.157" rpy="0 3.14159265358979 0"/>
+      </xacro:sensor_d435>
+      <!-- Realsense Gazebo Plugin -->
+      <xacro:gazebo_d435 camera_name="${cam_name}" reference_link="${cam_name}_link" topics_ns="my_gen3" depth_optical_frame="${cam_name}_depth_optical_frame" color_optical_frame="${cam_name}_color_optical_frame" infrared1_optical_frame="${cam_name}_left_ir_optical_frame" infrared2_optical_frame="${cam_name}_right_ir_optical_frame"/>
     </xacro:if>
   </xacro:macro>
 </robot>

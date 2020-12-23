@@ -16,13 +16,13 @@ class ExampleInitializeGazeboRobot(object):
     self.last_action_notif_type = None
 
     try:
-      self.robot_name = rospy.get_param('~robot_name')
+      self.robot_name = 'my_gen3'
       self.action_topic_sub = rospy.Subscriber("/" + self.robot_name + "/action_topic", ActionNotification, self.cb_action_topic)
 
       # Wait for the driver to be initialised
       while not rospy.has_param("/" + self.robot_name + "/is_initialized"):
         time.sleep(0.1)
-      
+
       # Init the services
       read_action_full_name = '/' + self.robot_name + '/base/read_action'
       rospy.wait_for_service(read_action_full_name)
@@ -98,7 +98,7 @@ def main():
   except Exception as e:
     print (e)
     success = False
-  
+
   # For testing purposes
   rospy.set_param("is_initialized", success)
   if not success:

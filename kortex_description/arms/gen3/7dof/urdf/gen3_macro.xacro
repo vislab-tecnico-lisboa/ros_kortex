@@ -333,9 +333,9 @@
         <parent link="${prefix}end_effector_link" />
         <child  link="${prefix}camera_color_frame" />
       </joint>
-      <xacro:sensor_d435 name="realsense" parent="${prefix}camera_link">
+      <!-- <xacro:sensor_d435 name="realsense" parent="${prefix}camera_link">
         <origin xyz="0.0 0.0 0.04" rpy="0 3.14159265358979 3.14159265358979"/>
-      </xacro:sensor_d435>
+      </xacro:sensor_d435> -->
       <!-- Realsense Gazebo Plugin -->
       <xacro:gazebo_d435 camera_name="${cam_name}" reference_link="${cam_name}_link" topics_ns="my_gen3" depth_optical_frame="${cam_name}_depth_optical_frame" color_optical_frame="${cam_name}_color_optical_frame" infrared1_optical_frame="${cam_name}_left_ir_optical_frame" infrared2_optical_frame="${cam_name}_right_ir_optical_frame"/>
     </xacro:if>

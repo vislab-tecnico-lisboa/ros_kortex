@@ -7,8 +7,6 @@ import time
 from kortex_driver.srv import *
 from kortex_driver.msg import *
 
-#This script must be runned from a catkin workspace directory
-
 class ExampleCartesianActionsWithNotifications:
     def __init__(self):
         try:
@@ -140,9 +138,12 @@ class ExampleCartesianActionsWithNotifications:
     global commandobj
 
     def commandobj(objectname, command_id):
+        path = os.path.dirname(os.path.realpath(__file__))
+        path = path.replace("/scripts", "")
+        path = path + "/ycb_gazebo_sdf/"
         #Defines type of command: 1-Spawn, 0-Despawn
         if(command_id == 1):
-            return "gz model -f src/ros_kortex/kortex_gazebo/ycb_gazebo_sdf/" + objectname + "/model.sdf -m " + objectname +" -x 0.6 -y 0 -z 0"
+            return "gz model -f " + path + objectname + "/model.sdf -m " + objectname +" -x 0.6 -y 0 -z 0"
         elif(command_id == 0):
             return "gz model -m " + objectname + " -d"
         else:
@@ -151,8 +152,8 @@ class ExampleCartesianActionsWithNotifications:
     global argument_identifier
 
     def argument_identifier():
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        path = dir_path + '/objectslist.txt'
+        path = os.path.dirname(os.path.realpath(__file__))
+        path = path + '/objectslist.txt'
         objfile = open(path,'r')
         load_data = objfile.readlines()
         objfile.close()
@@ -254,7 +255,7 @@ class ExampleCartesianActionsWithNotifications:
                 req.input.handle.identifier = 1002
                 req.input.name = "pose2"
 
-                my_constrained_pose.target_pose.x = 0.7
+                my_constrained_pose.target_pose.x = 0.6
 
                 req.input.oneof_action_parameters.reach_pose[0] = my_constrained_pose
 
@@ -268,7 +269,7 @@ class ExampleCartesianActionsWithNotifications:
                 else:
                     rospy.loginfo("Waiting for pose 2 to finish...")
 
-                self.wait_for_action_end_or_abort()
+                self.wait_for_action_end_or_abort() 
 
                 # Prepare and send pose 3
                 req.input.handle.identifier = 1003

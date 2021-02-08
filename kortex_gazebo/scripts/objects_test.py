@@ -7,6 +7,42 @@ import time
 from kortex_driver.srv import *
 from kortex_driver.msg import *
 
+def commandobj(objectname, command_id):
+    path = os.path.dirname(os.path.realpath(__file__))
+    path = path.replace("/scripts", "")
+    path = path + "/ycb_gazebo_sdf/"
+    #Defines type of command: 1-Spawn, 0-Despawn
+    if(command_id == 1):
+        return "gz model -f " + path + objectname + "/model.sdf -m " + objectname +" -x 0.6 -y 0 -z 0"
+    elif(command_id == 0):
+        return "gz model -m " + objectname + " -d"
+    else:
+        raise NameError("Command not found!")
+        return "error"
+
+def argument_identifier():
+    path = os.path.dirname(os.path.realpath(__file__))
+    path = path + '/objectslist.txt'
+    try:
+        objfile = open(path,'r')
+        load_data = objfile.readlines()
+    finally:
+        objfile.close()
+
+    objlist = ["empty"]
+    for i in range(len(sys.argv)):
+        for j in range(len(load_data)):
+            token = "^" + sys.argv[i]
+            check = re.search(token, load_data[j])
+            if check:
+                if(objlist[0] == "empty"):
+                    objlist[0] = load_data[j][:-1]  
+                    break       
+                else:
+                    objlist.append(load_data[j][:-1])
+                    break
+    return objlist
+
 class ExampleCartesianActionsWithNotifications:
     def __init__(self):
         try:
@@ -135,43 +171,6 @@ class ExampleCartesianActionsWithNotifications:
 
         return True
 
-    global commandobj
-
-    def commandobj(objectname, command_id):
-        path = os.path.dirname(os.path.realpath(__file__))
-        path = path.replace("/scripts", "")
-        path = path + "/ycb_gazebo_sdf/"
-        #Defines type of command: 1-Spawn, 0-Despawn
-        if(command_id == 1):
-            return "gz model -f " + path + objectname + "/model.sdf -m " + objectname +" -x 0.6 -y 0 -z 0"
-        elif(command_id == 0):
-            return "gz model -m " + objectname + " -d"
-        else:
-            return "error"
-
-    global argument_identifier
-
-    def argument_identifier():
-        path = os.path.dirname(os.path.realpath(__file__))
-        path = path + '/objectslist.txt'
-        objfile = open(path,'r')
-        load_data = objfile.readlines()
-        objfile.close()
-
-        objlist = ["empty"]
-        for i in range(len(sys.argv)):
-            for j in range(len(load_data)):
-                token = "^" + sys.argv[i]
-                check = re.search(token, load_data[j])
-                if check:
-                    if(objlist[0] == "empty"):
-                        objlist[0] = load_data[j][:-1]  
-                        break       
-                    else:
-                        objlist.append(load_data[j][:-1])
-                        break
-        return objlist
-
     def main(self):
         # For testing purposes
         success = self.is_init_success
@@ -205,18 +204,17 @@ class ExampleCartesianActionsWithNotifications:
             if(len(sys.argv) >= 2):
                 list_of_objects = argument_identifier()
                 if list_of_objects[0] == "empty":
-                    objectslist = ["006_mustard_bottle_textured"]
+                    objectslist = ["006_mustard_bottle_textured"] #default
                 else:
                     objectslist = list_of_objects
             else:
-                objectslist = ["006_mustard_bottle_textured"]
+                objectslist = ["006_mustard_bottle_textured"] #default
 
             for val in range(len(objectslist)):
 
                 #*******************************************************************************
                 # Spawn Object
-                commandstring = commandobj(objectslist[val], 1)
-                os.system(commandstring)
+                os.system(commandobj(objectslist[val], 1))
 
                 # Prepare and send pose 1
                 my_cartesian_speed = CartesianSpeed()
@@ -255,7 +253,7 @@ class ExampleCartesianActionsWithNotifications:
                 req.input.handle.identifier = 1002
                 req.input.name = "pose2"
 
-                my_constrained_pose.target_pose.x = 0.6
+                my_constrained_pose.target_pose.x = 0.7
 
                 req.input.oneof_action_parameters.reach_pose[0] = my_constrained_pose
 
@@ -295,8 +293,7 @@ class ExampleCartesianActionsWithNotifications:
                 success &= self.all_notifs_succeeded
 
                 # Despawn Object
-                commandstring = commandobj(objectslist[val], 0)
-                os.system(commandstring)
+                os.system(commandobj(objectslist[val], 0))
 
                 # Home Robot
                 os.system("rosrun kortex_gazebo home_robot.py")

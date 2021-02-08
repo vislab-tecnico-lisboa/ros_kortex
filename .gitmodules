@@ -1,0 +1,3 @@
+[submodule "kortex_gazebo/ycb_gazebo_sdf"]
+	path = kortex_gazebo/ycb_gazebo_sdf
+	url = https://github.com/kyouma9sun/ycb_gazebo_sdf.git

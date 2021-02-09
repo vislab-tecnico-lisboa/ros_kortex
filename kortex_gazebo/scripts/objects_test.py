@@ -7,15 +7,18 @@ import time
 from kortex_driver.srv import *
 from kortex_driver.msg import *
 
-def commandobj(objectname, command_id):
+def commandobj(object_description, command_id):
+    #Defines Directory Path
     path = os.path.dirname(os.path.realpath(__file__))
     path = path.replace("/scripts", "")
     path = path + "/ycb_gazebo_sdf/"
+    #Defines specific command arguments for the Object
+    object_arguments = object_description.split(" ", 1)
     #Defines type of command: 1-Spawn, 0-Despawn
     if(command_id == 1):
-        return "gz model -f " + path + objectname + "/model.sdf -m " + objectname +" -x 0.6 -y 0 -z 0"
+        return "gz model -f " + path + object_arguments[0] + "/model.sdf -m " + object_arguments[0] + " " + object_arguments[1]
     elif(command_id == 0):
-        return "gz model -m " + objectname + " -d"
+        return "gz model -m " + object_arguments[0] + " -d"
     else:
         raise NameError("Command not found!")
         return "error"
@@ -204,11 +207,11 @@ class ExampleCartesianActionsWithNotifications:
             if(len(sys.argv) >= 2):
                 list_of_objects = argument_identifier()
                 if list_of_objects[0] == "empty":
-                    objectslist = ["006_mustard_bottle_textured"] #default
+                    objectslist = ["006_mustard_bottle_textured -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4"] #default
                 else:
                     objectslist = list_of_objects
             else:
-                objectslist = ["006_mustard_bottle_textured"] #default
+                objectslist = ["006_mustard_bottle_textured -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4"] #default
 
             for val in range(len(objectslist)):
 
@@ -227,9 +230,9 @@ class ExampleCartesianActionsWithNotifications:
                 my_constrained_pose.target_pose.x = 0.5
                 my_constrained_pose.target_pose.y = 0
                 my_constrained_pose.target_pose.z = 0.10
-                my_constrained_pose.target_pose.theta_x = 0
-                my_constrained_pose.target_pose.theta_y = 90
-                my_constrained_pose.target_pose.theta_z = 0
+                my_constrained_pose.target_pose.theta_x = 90
+                my_constrained_pose.target_pose.theta_y = 0
+                my_constrained_pose.target_pose.theta_z = 90
 
                 req = ExecuteActionRequest()
                 req.input.oneof_action_parameters.reach_pose.append(my_constrained_pose)
@@ -295,10 +298,10 @@ class ExampleCartesianActionsWithNotifications:
                 # Despawn Object
                 os.system(commandobj(objectslist[val], 0))
 
-                # Home Robot
-                os.system("rosrun kortex_gazebo home_robot.py")
-
                 success &= self.all_notifs_succeeded
+
+            # Home Robot
+            os.system("rosrun kortex_gazebo home_robot.py")
 
         # For testing purposes
         rospy.set_param("/kortex_examples_test_results/cartesian_poses_with_notifications_python", success)

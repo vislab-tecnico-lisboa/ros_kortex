@@ -1,8 +1,8 @@
 001_chips_can_textured -x 0.6 -y 0 -z 0
 002_master_chef_can_textured -x 0.6 -y 0 -z 0
-003_cracker_box_textured -x 0.6 -y 0 -z 0
-004_sugar_box_textured -x 0.6 -y 0 -z 0
-005_tomato_soup_can_textured -x 0.6 -y 0 -z 0
+003_cracker_box_textured -x 0.67 -y -0.014 -z 0 -R 0 -P 0 -Y -1.570796
+004_sugar_box_textured -x 0.65 -y 0 -z 0 -R 0 -P 0 -Y -1.570796
+005_tomato_soup_can_textured -x 0.6 -y -0.08 -z 0
 006_mustard_bottle_textured -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4
 007_tuna_fish_can_textured -x 0.6 -y 0 -z 0
 008_pudding_box_textured -x 0.6 -y 0 -z 0
@@ -27,7 +27,7 @@
 031_spoon_textured -x 0.6 -y 0 -z 0
 032_knife_textured -x 0.6 -y 0 -z 0
 033_spatula_textured -x 0.6 -y 0 -z 0
-035_power_drill_textured -x 0.6 -y 0 -z 0.08 -R 1.598 -P 0 -Y 3.128
+035_power_drill_textured -x 0.6 -y -0.0237 -z 0.08 -R 1.598 -P 0 -Y 3.128
 036_wood_block_textured -x 0.6 -y 0 -z 0
 037_scissors_textured -x 0.6 -y 0 -z 0
 038_padlock_textured -x 0.6 -y 0 -z 0

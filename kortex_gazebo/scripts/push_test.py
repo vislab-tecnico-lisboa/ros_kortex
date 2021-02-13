@@ -7,6 +7,18 @@ import time
 from kortex_driver.srv import *
 from kortex_driver.msg import *
 
+"""
+    Vislab-Tecnico-Lisboa
+
+    Name: objects_test.py
+    Input arguments: Name file and the testing objects' ID 
+
+    This script will start the robot from the Home position, spawn some object(s),
+    push them and then despawns those objects consecutively. The objects to spawn
+    can be requested as arguments throught their number ID. The movement ends also
+    at Home position. 
+"""
+
 def commandobj(object_description, command_id):
     #Defines Directory Path
     path = os.path.dirname(os.path.realpath(__file__))
@@ -293,15 +305,15 @@ class ExampleCartesianActionsWithNotifications:
 
                 self.wait_for_action_end_or_abort()
 
-                success &= self.all_notifs_succeeded
-
                 # Despawn Object
                 os.system(commandobj(objectslist[val], 0))
 
                 success &= self.all_notifs_succeeded
 
-            # Home Robot
-            os.system("rosrun kortex_gazebo home_robot.py")
+            #*******************************************************************************
+            # Finish the example at the Home position
+            success &= self.example_home_the_robot()
+            #*******************************************************************************
 
         # For testing purposes
         rospy.set_param("/kortex_examples_test_results/cartesian_poses_with_notifications_python", success)

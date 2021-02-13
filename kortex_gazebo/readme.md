@@ -96,3 +96,15 @@ By loading one instance of [this plugin](../third_party/roboticsgroup_gazebo_plu
 ### Gazebo grasp plugin
 
 Gazebo doesn't support grasping very well. By loading [this plugin](../third_party/gazebo-pkgs/README.md), we make sure objects grasped by the gripper will not fall. The plugin parameters are specified in with the [transmission elements for the Robotiq gripper](../kortex_description/grippers/robotiq_2f_85/urdf/robotiq_2f_85_transmission_macro.xacro) and the [transmission elements for the Gen3 lite gripper](../kortex_description/grippers/gen3_lite_2f/urdf/gen3_lite_2f_transmission_macro.xacro).
+
+<!-- 
+*Vislab-Tecnico-Lisboa
+* -->
+
+## Test scripts
+
+Two different Python scripts were added to this package: [Python script](./scripts/push_test.py) and [Python script](./scripts/grab_test.py).
+- **Push Objects** : The executable [Python script](./scripts/push_test.py) spawns a selected number of objects from [YCB objects](./ycb_gazebo_sdf) and, one by one, pushes them away trought the **X axis**, in a specified order, and then despawns them.
+- **Grab Objects** : The executable [Python script](./scripts/grab_test.py) spawns a selected number of objects from [YCB objects](./ycb_gazebo_sdf) and takes advantage on the capabilities of the **gripper** (if present) in order to lift the objects up, one by one, then brings them down again and finally releases and despawns them.
+
+Both executables utilize [Objects Spawn Data File](./scripts/objectslist.txt) in orther to spawn and despawn the objects in suitable positions predifined for the tests.

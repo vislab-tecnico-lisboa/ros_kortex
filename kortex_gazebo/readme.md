@@ -104,7 +104,9 @@ Gazebo doesn't support grasping very well. By loading [this plugin](../third_par
 ## Test scripts
 
 Two different Python scripts were added to this package: [Push Objects](./scripts/push_test.py) and [Grab Objects](./scripts/grab_test.py).
-- **Push Objects** : The executable [push_test](./scripts/push_test.py) spawns a selected number of objects from [YCB objects folder](./ycb_gazebo_sdf) and, one by one, pushes them away trought the **X axis**, in a specified order, and then despawns them.
+- **Push Objects** : The executable [push_test](./scripts/push_test.py) spawns a selected number of objects from [YCB objects](./ycb_gazebo_sdf) and, one by one, pushes them away trought the **X axis**, in a specified order, and then despawns them.
 - **Grab Objects** : The executable [grab_test](./scripts/grab_test.py) spawns a selected number of objects from [YCB objects](./ycb_gazebo_sdf) and takes advantage on the capabilities of the **gripper** (if present) in order to lift the objects up, one by one, then brings them down again and finally releases and despawns them.
 
-Both executables utilize an [object data file](./scripts/objectslist.txt) in orther to spawn and despawn the objects in suitable positions predifined for the tests.
+Both executables utilize an [object data file](./scripts/objectslist.txt) in orther to spawn and despawn the objects in suitable positions predifined for the tests. The objects to use in each test must be specified as arguments by their **number identifier** composed by 3 numerical digits, for example:
+
+`rosrun kortex_gazebo grab_test.py 006 035 003 005`

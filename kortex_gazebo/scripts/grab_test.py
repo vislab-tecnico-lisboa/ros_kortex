@@ -19,16 +19,21 @@ from kortex_driver.msg import *
     number ID. The movement ends also at Home position. 
 """
 
-def commandobj(object_description, command_id):
-    #Defines Directory Path
+def command_obj(object_description, command_id):
+    # Defines Directory Path
     path = os.path.dirname(os.path.realpath(__file__))
     path = path.replace("/scripts", "")
     path = path + "/ycb_gazebo_sdf/"
-    #Defines specific command arguments for the Object
-    object_arguments = object_description.split(" ", 1)
-    #Defines type of command: 1-Spawn, 0-Despawn
+    # Defines specific command arguments for the Object
+    if((object_description.find("side") != -1) or (object_description.find("upper") != -1)):
+        object_arguments = object_description.split(" ", 2)
+        placement = object_arguments[2]
+    else: # Default
+        object_arguments = object_description.split(" ", 1)
+        placement = object_arguments[1]
+    # Defines type of command: 1-Spawn, 0-Despawn
     if(command_id == 1):
-        return "gz model -f " + path + object_arguments[0] + "/model.sdf -m " + object_arguments[0] + " " + object_arguments[1]
+        return "gz model -f " + path + object_arguments[0] + "/model.sdf -m " + object_arguments[0] + " " + placement
     elif(command_id == 0):
         return "gz model -m " + object_arguments[0] + " -d"
     else:
@@ -246,17 +251,37 @@ class ExampleCartesianActionsWithNotifications:
             if(len(sys.argv) >= 2):
                 list_of_objects = argument_identifier()
                 if list_of_objects[0] == "empty":
-                    objectslist = ["006_mustard_bottle_textured -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4"] #default
+                    objectslist = ["006_mustard_bottle_textured side -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4"] # default
                 else:
                     objectslist = list_of_objects
             else:
-                objectslist = ["006_mustard_bottle_textured -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4"] #default
+                objectslist = ["006_mustard_bottle_textured side -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4"] # default
 
             for val in range(len(objectslist)):
 
                 #*******************************************************************************
                 # Spawn Object
-                os.system(commandobj(objectslist[val], 1))
+                os.system(command_obj(objectslist[val], 1))
+
+                # Set pose values to pick object from the side or above
+                if(objectslist[val].find("side") != -1):
+                    pose_1_values = [0.50, 0.00, 0.08, 90, 0, 90]
+                    pose_2_values = [0.58, 0.00, 0.08, 90, 0, 90]
+                    pose_3_values = [0.58, 0.00, 0.50, 90, 0, 90]
+                    pose_4_values = [0.58, 0.00, 0.08, 90, 0, 90]
+                    pose_5_values = [0.45, 0.00, 0.30, 90, 0, 90]
+                elif(objectslist[val].find("upper") != -1):
+                    pose_1_values = [0.60, 0.00, 0.35, 180, 0, 180]
+                    pose_2_values = [0.60, 0.00, 0.06, 180, 0, 180]
+                    pose_3_values = [0.60, 0.00, 0.40, 180, 0, 180]
+                    pose_4_values = [0.60, 0.00, 0.06, 180, 0, 180]
+                    pose_5_values = [0.45, 0.00, 0.35, 90, 0, 90]
+                else: # default is side
+                    pose_1_values = [0.50, 0.00, 0.10, 90, 0, 90]
+                    pose_2_values = [0.58, 0.00, 0.10, 90, 0, 90]
+                    pose_3_values = [0.58, 0.00, 0.50, 90, 0, 90]
+                    pose_4_values = [0.58, 0.00, 0.10, 90, 0, 90]
+                    pose_5_values = [0.45, 0.00, 0.30, 90, 0, 90]
 
                 # Prepare and send pose 1
                 my_cartesian_speed = CartesianSpeed()
@@ -266,12 +291,12 @@ class ExampleCartesianActionsWithNotifications:
                 my_constrained_pose = ConstrainedPose()
                 my_constrained_pose.constraint.oneof_type.speed.append(my_cartesian_speed)
 
-                my_constrained_pose.target_pose.x = 0.5
-                my_constrained_pose.target_pose.y = 0
-                my_constrained_pose.target_pose.z = 0.10
-                my_constrained_pose.target_pose.theta_x = 90
-                my_constrained_pose.target_pose.theta_y = 0
-                my_constrained_pose.target_pose.theta_z = 90
+                my_constrained_pose.target_pose.x = pose_1_values[0]
+                my_constrained_pose.target_pose.y = pose_1_values[1]
+                my_constrained_pose.target_pose.z = pose_1_values[2]
+                my_constrained_pose.target_pose.theta_x = pose_1_values[3]
+                my_constrained_pose.target_pose.theta_y = pose_1_values[4]
+                my_constrained_pose.target_pose.theta_z = pose_1_values[5]
 
                 req = ExecuteActionRequest()
                 req.input.oneof_action_parameters.reach_pose.append(my_constrained_pose)
@@ -295,7 +320,8 @@ class ExampleCartesianActionsWithNotifications:
                 req.input.handle.identifier = 1002
                 req.input.name = "pose2"
 
-                my_constrained_pose.target_pose.x = 0.58
+                my_constrained_pose.target_pose.x = pose_2_values[0]
+                my_constrained_pose.target_pose.z = pose_2_values[2]
 
                 req.input.oneof_action_parameters.reach_pose[0] = my_constrained_pose
 
@@ -312,6 +338,7 @@ class ExampleCartesianActionsWithNotifications:
                 self.wait_for_action_end_or_abort() 
 
                 # Close Gripper
+                rospy.loginfo("Grabbing the object...")
                 if self.is_gripper_present:
                     success &= self.example_send_gripper_command(0.9)
                 else:
@@ -322,7 +349,8 @@ class ExampleCartesianActionsWithNotifications:
                 req.input.handle.identifier = 1003
                 req.input.name = "pose3"
 
-                my_constrained_pose.target_pose.z = 0.5
+                my_constrained_pose.target_pose.x = pose_3_values[0]
+                my_constrained_pose.target_pose.z = pose_3_values[2]
 
                 req.input.oneof_action_parameters.reach_pose[0] = my_constrained_pose
 
@@ -342,7 +370,8 @@ class ExampleCartesianActionsWithNotifications:
                 req.input.handle.identifier = 1004
                 req.input.name = "pose4"
 
-                my_constrained_pose.target_pose.z = 0.10
+                my_constrained_pose.target_pose.x = pose_4_values[0]
+                my_constrained_pose.target_pose.z = pose_4_values[2]
 
                 req.input.oneof_action_parameters.reach_pose[0] = my_constrained_pose
 
@@ -359,6 +388,7 @@ class ExampleCartesianActionsWithNotifications:
                 self.wait_for_action_end_or_abort()
                 
                 # Open Gripper
+                rospy.loginfo("Releasing the object...")
                 if self.is_gripper_present:
                     success &= self.example_send_gripper_command(0.0)
                 else:
@@ -369,8 +399,12 @@ class ExampleCartesianActionsWithNotifications:
                 req.input.handle.identifier = 1005
                 req.input.name = "pose5"
 
-                my_constrained_pose.target_pose.x = 0.45
-                my_constrained_pose.target_pose.z = 0.3
+                my_constrained_pose.target_pose.x = pose_5_values[0]
+                my_constrained_pose.target_pose.y = pose_5_values[1]
+                my_constrained_pose.target_pose.z = pose_5_values[2]
+                my_constrained_pose.target_pose.theta_x = pose_5_values[3]
+                my_constrained_pose.target_pose.theta_y = pose_5_values[4]
+                my_constrained_pose.target_pose.theta_z = pose_5_values[5]
 
                 req.input.oneof_action_parameters.reach_pose[0] = my_constrained_pose
 
@@ -389,7 +423,7 @@ class ExampleCartesianActionsWithNotifications:
                 success &= self.all_notifs_succeeded
 
                 # Despawn Object
-                os.system(commandobj(objectslist[val], 0))
+                os.system(command_obj(objectslist[val], 0))
 
             #*******************************************************************************
             # Finish the example at the Home position

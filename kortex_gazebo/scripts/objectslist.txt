@@ -1,22 +1,22 @@
-001_chips_can_textured -x 0.6 -y 0 -z 0
-002_master_chef_can_textured -x 0.6 -y 0 -z 0
-003_cracker_box_textured -x 0.67 -y -0.014 -z 0 -R 0 -P 0 -Y -1.570796
-004_sugar_box_textured -x 0.65 -y 0 -z 0 -R 0 -P 0 -Y -1.570796
-005_tomato_soup_can_textured -x 0.6 -y -0.08 -z 0
-006_mustard_bottle_textured -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4
-007_tuna_fish_can_textured -x 0.6 -y 0 -z 0
-008_pudding_box_textured -x 0.6 -y 0 -z 0
-009_gelatin_box_textured -x 0.6 -y 0 -z 0
-010_potted_meat_can_textured -x 0.6 -y 0 -z 0
-011_banana_textured -x 0.6 -y 0 -z 0
-012_strawberry_textured -x 0.6 -y 0 -z 0
-013_apple_textured -x 0.6 -y 0 -z 0
-014_lemon_textured -x 0.6 -y 0 -z 0
-015_peach_textured -x 0.6 -y 0 -z 0
-016_pear_textured -x 0.6 -y 0 -z 0
-017_orange_textured -x 0.6 -y 0 -z 0
+001_chips_can_textured -x 0.6 -y 0 -z 0 #error
+002_master_chef_can_textured side -x 0.6 -y 0 -z 0
+003_cracker_box_textured side -x 0.67 -y -0.014 -z 0 -R 0 -P 0 -Y -1.570796
+004_sugar_box_textured side -x 0.65 -y 0 -z 0 -R 0 -P 0 -Y -1.570796
+005_tomato_soup_can_textured side -x 0.6 -y -0.08 -z 0
+006_mustard_bottle_textured side -x 0.6 -y 0.02675 -z 0 -R 0 -P 0 -Y 0.4
+007_tuna_fish_can_textured up -x 0.6 -y 0 -z 0
+008_pudding_box_textured side -x 0.6 -y 0.02 -z 0.028 -R 1.7036 -P 2.0516 -Y -0.1416
+009_gelatin_box_textured side -x 0.6 -y 0 -z 0
+010_potted_meat_can_textured side -x 0.64 -y 0.035 -z 0
+011_banana_textured upper -x 0.62 -y 0 -z 0
+012_strawberry_textured upper -x 0.6 -y -0.018 -z 0
+013_apple_textured upper -x 0.6 -y 0 -z 0
+014_lemon_textured upper -x 0.61 -y -0.01 -z 0
+015_peach_textured upper -x 0.62 -y 0 -z 0
+016_pear_textured upper -x 0.64 -y 0 -z 0
+017_orange_textured upper -x 0.61 -y 0.02 -z 0
 018_plum_textured -x 0.6 -y 0 -z 0
-019_pitcher_base_textured -x 0.6 -y 0 -z 0
+019_pitcher_base_textured -x 0.62 -y -0.01 -z 0
 021_bleach_cleanser_textured -x 0.6 -y 0 -z 0
 022_windex_bottle_textured -x 0.6 -y 0 -z 0
 024_bowl_textured -x 0.6 -y 0 -z 0
@@ -27,7 +27,7 @@
 031_spoon_textured -x 0.6 -y 0 -z 0
 032_knife_textured -x 0.6 -y 0 -z 0
 033_spatula_textured -x 0.6 -y 0 -z 0
-035_power_drill_textured -x 0.6 -y -0.0237 -z 0.08 -R 1.598 -P 0 -Y 3.128
+035_power_drill_textured side -x 0.6 -y -0.0237 -z 0.08 -R 1.598 -P 0 -Y 3.128
 036_wood_block_textured -x 0.6 -y 0 -z 0
 037_scissors_textured -x 0.6 -y 0 -z 0
 038_padlock_textured -x 0.6 -y 0 -z 0

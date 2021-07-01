@@ -165,6 +165,18 @@
         <!-- Start RViz -->
         <node name="rviz" pkg="rviz" type="rviz" if="$(arg start_rviz)"/>
 
+        <!-- Start node that obtains the Point Cloud (to develop) -->
+        <!--
+        <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
+
+        <node pkg="nodelet" type="nodelet" name="depht_image_nodelet"
+                args="load depth_image_proc/point_cloud_xyz nodelet_manager">
+            <remap from="camera_info" to="/camera/depth/camera_info"/>
+            <remap from="image_rect" to="/camera/depth/image_rect_raw"/>
+            <remap from="points" to="/camera/depth/points"/>
+        </node>
+        -->
+
     </group>
 
 </launch>
